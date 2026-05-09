@@ -90,38 +90,47 @@ The "core" of a hexagonal project is application and domain
 ## FOLDER STRUCTURE
 
 ```bash
-└── hexagonal_core
-    ├── component_1
-    │   ├── application
-    │   └── domain
-    └── component_2
-        ├── application
-        │   ├── dtos
-        │   │   ├── input.py
-        │   │   └── output.py
-        │   ├── events
-        │   ├── exceptions
-        │   ├── ports
-        │   │   ├── input
-        │   │   │   ├── commands.py
-        │   │   │   ├── others.py
-        │   │   │   └── queries.py
-        │   │   └── output
-        │   │       ├── event_listeners.py
-        │   │       ├── others.py
-        │   │       └── repositories.py
-        │   ├── services
-        │   │   ├── commands.py
-        │   │   ├── others.py
-        │   │   └── queries.py
-        │   └── utils
-        └── domain
-            ├── entities.py
-            ├── events.py
-            ├── exceptions.py
-            ├── ientities.py
-            ├── services.py
-            ├── utils.py
-            └── valueobjects.py
+src/
+└── module_1/
+ ├── core/
+ │ ├── domain/
+ │ │ ├── entities/ # Recommended: one entity is the aggregated root 
+ │ │ ├── value_objects/
+ │ │ ├── services/
+ │ │ ├── events/
+ │ │ └── exceptions/
+ │ │
+ │ └── application/
+ │ ├── ports/
+ │ │ ├── in/ # interfaces: Commands and Queries in separated files
+ │ │ │ ├── i_register_user.ts|rs|py # defines command, dto and port
+ │ │ │ ├── i_login_user.ts|rs|py
+ │ │ │ └── i_get_user_profile.ts|rs|py # defines query, dto and port
+ │ │ └── out/ # Interfaces
+ │ │ ├── i_user_repository.ts|rs|py
+ │ │ ├── i_email_sender.ts|rs|py
+ │ │ └── i_event_publisher.ts|rs|py
+ │ ├── services/ # implements interfaces of application/ports/in/
+ │ │ ├── register_user_service.ts|rs|py
+ │ │ ├── login_user_service.ts|rs|py
+ │ │ └── get_user_profile_service.ts|rs|py
+ │ ├── events/
+ │ └── exceptions/
+ │
+ ├── adapters/
+ │ ├── api/
+ │ │ ├── controllers/
+ │ │ │ ├── auth_controller.ts|rs|py
+ │ │ │ └── user_controller.ts|rs|py
+ │ │ ├── dtos/
+ │ │ └── mappers/
+ │ │
+ │ └── infrastructure/ # implements interfaces of application/ports/out/
+ │ │ └── user_repository_sql.ts|rs|py
+ │ │ └── sendgrid_email_sender.ts|rs|py
+ │ │ └── kafka_event_publisher.ts|rs|py
+ │ └── mappers/
+ │
+ └── main.ts|rs|py
 
 ```
